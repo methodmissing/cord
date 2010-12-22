@@ -1,0 +1,29 @@
+Simple Concat Tree / Rope / Cord implementation for Ruby MRI
+  (c) 2010 Lourens Naudé (methodmissing)
+
+  http://github.com/methodmissing/cord
+
+See http://www.cs.ubc.ca/local/reading/proceedings/spe91-95/spe/vol25/issue12/spe986.pdf and  http://en.wikipedia.org/wiki/Rope_(computer_science) for context.
+
+This library works with Ruby 1.8 and 1.9 and exposes the following API :
+
+  c = Cord.new('test')
+  c.depth #=> 1
+  c << 'cord'
+  c.depth #=> 2
+
+  c = Cord.new('aaaa')
+  c << 'bbbb'
+  c.to_s #=> 'aaaabbbb'
+
+To run the test suite:
+
+  rake
+
+Todo:
+
+  Tree rebalance / normalization
+  Exploit shared string / COW semantics further
+  Cord#each
+
+Work in progress, thanks for watching!
