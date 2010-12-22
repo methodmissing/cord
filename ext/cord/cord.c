@@ -58,7 +58,7 @@ static VALUE rb_new_flat_cord(void *left, void *right)
 {
     char *cord = NULL;
     cord = rb_merge_cords(left, right);
-    return rb_str_new2(cord);
+    return rb_str_new4(rb_str_new2(cord));
 }
 
 static void *rb_new_concat_cord(void * left, void * right){
@@ -100,8 +100,8 @@ static void concat_cord_to_s(VALUE buffer, void * cord)
     if (EMPTY_CORD_P(cord) || STRING_CORD_P(cord)) return;
     concat_cord_to_s(buffer, CONCAT_CORD(cord)->left);
     concat_cord_to_s(buffer, CONCAT_CORD(cord)->right);
-    if (STRING_CORD_P(CONCAT_CORD(cord)->left)) rb_str_cat2(buffer, RSTRING_PTR(CONCAT_CORD(cord)->left));
-    rb_str_cat2(buffer, RSTRING_PTR(CONCAT_CORD(cord)->right));
+    if (STRING_CORD_P(CONCAT_CORD(cord)->left)) rb_str_cat(buffer, RSTRING_PTR(CONCAT_CORD(cord)->left), RSTRING_LEN(CONCAT_CORD(cord)->left));
+    rb_str_cat(buffer, RSTRING_PTR(CONCAT_CORD(cord)->right), RSTRING_LEN(CONCAT_CORD(cord)->right));
 }
 
 static VALUE rb_cord_to_s(VALUE obj)
@@ -113,7 +113,7 @@ static VALUE rb_cord_to_s(VALUE obj)
     if (CONCAT_CORD_P(c->cord)){
       buffer = rb_str_buf_new((long)CORD_LENGTH(c->cord));
       concat_cord_to_s(buffer, c->cord);
-      return buffer;
+      return rb_str_new4(buffer);
     }
     return Qnil;
 }
@@ -123,8 +123,8 @@ static VALUE rb_cord_append(VALUE obj, VALUE str)
     RCord *c = GetCord(obj);
     if (rb_obj_is_kind_of(str, rb_cCord)) str = rb_cord_to_s(str);
     Check_Type(str, T_STRING);
-    str = rb_str_new4(str);
     if (RSTRING_LEN(str) == 0) return Qnil;
+    str = rb_str_new4(str);
     if (EMPTY_CORD_P(c->cord)){
       c->cord = (void *)str;
     }else{

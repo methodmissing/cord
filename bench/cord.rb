@@ -2,7 +2,7 @@ $:.unshift "."
 require 'benchmark'
 require File.dirname(__FILE__) + '/../ext/cord/cord'
 
-TESTS = 100_000
+TESTS = 10_000
 PAYLOADS = [
 ('a' * 5),
 ('b' * 10),
