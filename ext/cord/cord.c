@@ -40,7 +40,7 @@ static void *rb_cord_balance(void *cord)
     return cord;
 }
 
-static char *rb_merge_cords(void *left, void *right)
+static VALUE rb_merge_cords(void *left, void *right)
 {
     char *cord = NULL;
     long left_len, right_len, len;
@@ -51,14 +51,12 @@ static char *rb_merge_cords(void *left, void *right)
     memcpy(cord, RSTRING_PTR(left), left_len);
     memcpy(cord + left_len, RSTRING_PTR(right), right_len);
     cord[len] = '\0';
-    return cord;
+    return rb_str_new(cord, len);
 }
 
 static VALUE rb_new_flat_cord(void *left, void *right)
 {
-    char *cord = NULL;
-    cord = rb_merge_cords(left, right);
-    return rb_str_new4(rb_str_new2(cord));
+    return rb_str_new4(rb_merge_cords(left, right));
 }
 
 static void *rb_new_concat_cord(void * left, void * right){
